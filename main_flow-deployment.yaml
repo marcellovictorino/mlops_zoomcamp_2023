@@ -1,0 +1,53 @@
+###
+### A complete description of a Prefect Deployment for flow 'main-flow'
+###
+name: ny-taxi-ride
+description: The main training pipeline
+version: 7ddcad04d661931a4d23ec1704b2724f
+# The work queue that will handle this deployment's runs
+work_queue_name: local-execution
+work_pool_name: local-pool
+tags: []
+parameters: {}
+schedule:
+  cron: 30 9 3 * *
+  timezone: Europe/London
+  day_or: true
+is_schedule_active: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: main-flow
+manifest_path: null
+storage: null
+path: /Users/marcellovictorino/Projects/mlops_zoomcamp_2023/week3_orchestration/prefect
+entrypoint: orchestrate.py:main_flow
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    train_path:
+      title: train_path
+      default: ./source_data/green_tripdata_2022-01.parquet
+      position: 0
+      type: string
+    val_path:
+      title: val_path
+      default: ./source_data/green_tripdata_2022-02.parquet
+      position: 1
+      type: string
+  required: null
+  definitions: null
+timestamp: "2023-06-12T14:44:26.969021+00:00"

@@ -21,8 +21,21 @@ EXPORT := poetry export -f requirements.txt --output requirements.txt
 # Local setup, ensures correct poetry version and pre-commit installation
 # LOCAL_SETUP := pip install -U pip && pip install -U poetry==$(POETRY_VERSION) && poetry config virtualenvs.in-project true && poetry shell && poetry install && pre-commit install && pre-commit install --hook-type commit-msg
 MLFLOW_SERVE := poetry run mlflow ui --backend-store-uri=sqlite:///mlflow.db
+PREFECT_SERVE := prefect server start
+PREFECT_WORK_POOL := cd week3_orchestration/prefect && prefect work-pool create "local-pool" --type process
+PREFECT_DEPLOY := prefect deploy orchestrate.py:main_flow -n local -p local-pool
+PREFECT_START_WORKER := prefect worker start --pool 'local-pool'
 
 MODULES := $(shell find . -mindepth 2 -maxdepth 2 -type f -name __init__.py -not -path "*/tests/*" | xargs -n1 dirname)
+
+prefect_work_pool_local:
+	$(PREFECT_WORK_POOL)
+
+prefect_deploy_local:
+	$(PREFECT_WORK_POOL) || $(PREFECT_DEPLOY) && $(PREFECT_START_WORKER)
+
+prefect_serve:
+	$(PREFECT_SERVE)
 
 mlflow_serve:
 	$(MLFLOW_SERVE)
